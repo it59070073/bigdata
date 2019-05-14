@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+from pyspark.streaming import StreamingContext
+
+
+# In[2]:
+
+
+ssc = StreamingContext(sc,1)
+
+
+# In[3]:
+
+
+lines = ssc.socketTextStream("localhost", 9999)
+
+
+# In[4]:
+
+
+words = lines.flatMap(lambda line: line.split(" "))
+
+
+# In[7]:
+
+
+pairs = words.map(lambda word : (word,1))
+
+
+# In[8]:
+
+
+wordCounts = pairs.reduceByKey(lambda x,y: x+y)
+
+
+# In[9]:
+
+
+wordCounts.pprint()
+
+
+# In[10]:
+
+
+ssc.start()
+
+
+# In[ ]:
+
+
+
+
